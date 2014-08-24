@@ -14,6 +14,6 @@ import java.util.ArrayList;
  */
 public class Users {
     private ArrayList<String> listaUsers = new ArrayList<>();
-    
+    private int x = 1;
     
 }
