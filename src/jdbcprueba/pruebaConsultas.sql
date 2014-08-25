@@ -78,6 +78,7 @@ select * from v$session;
 
 select * from v$logfile;
 
+select * from v$sgastat where pool = 'shared pool' and name = 'free memory';
 
 select group#, status, user, blocksize, archived from v$log;
 
@@ -104,3 +105,24 @@ select v$log.group#,sequence#,bytes/1048576 as MB,members,archived,v$log.status,
 SELECT * FROM V$log;
 select * from v$logfile;
 select * from v$log;
+
+
+
+COLUMN pool    HEADING "Pool"
+COLUMN name    HEADING "Name"
+COLUMN sgasize HEADING "Allocated" FORMAT 999,999,999
+COLUMN bytes   HEADING "Free" FORMAT 999,999,999
+
+SELECT
+    f.pool
+  , f.name
+  , s.sgasize
+  , f.bytes
+  , ROUND(f.bytes/s.sgasize*100, 2) "% Free"
+FROM
+    (SELECT SUM(bytes) sgasize, pool FROM v$sgastat GROUP BY pool) s
+  , v$sgastat f
+WHERE
+    f.name = 'free memory'
+  AND f.pool = s.pool
+/

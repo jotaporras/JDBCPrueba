@@ -23,8 +23,9 @@ public class Users {
             values = hashUsuarios.get(nombre);
             values.setDefaultTBS(defaultTBS);
             values.setAccountStatus(estado);
+            values.setTempTBS(tempTBS);
         }
-        else values = new UserData(defaultTBS,estado);
+        else values = new UserData(defaultTBS,estado,tempTBS);
         hashUsuarios.put(nombre, values);//No se si se ocupa para el primer caso.
     }
     

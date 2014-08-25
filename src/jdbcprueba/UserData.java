@@ -16,17 +16,25 @@ public class UserData {
     private String defaultTBS;
     private String tempTBS;
     private String accountStatus;
-    private ArrayList<String> ownedTables;
 
-    public UserData(String defaultTBS, String accountStatus) {
+    public UserData(String defaultTBS, String tempTBS, String accountStatus) {
         this.defaultTBS = defaultTBS;
+        this.tempTBS = tempTBS;
         this.accountStatus = accountStatus;
-        this.ownedTables = ownedTables;
     }
-
     public UserData() {
     }
 
+
+    public String getTempTBS() {
+        return tempTBS;
+    }
+
+    public void setTempTBS(String tempTBS) {
+        this.tempTBS = tempTBS;
+    }
+
+    
     public void setDefaultTBS(String defaultTBS) {
         this.defaultTBS = defaultTBS;
     }
@@ -38,15 +46,7 @@ public class UserData {
     public void setAccountStatus(String accountStatus) {
         this.accountStatus = accountStatus;
     }
-
-    public ArrayList<String> getOwnedTables() {
-        return ownedTables;
-    }
-
-    public void setOwnedTables(ArrayList<String> ownedTables) {
-        this.ownedTables = ownedTables;
-    }
-
+    
     public String getDefaultTBS() {
         return defaultTBS;
     }

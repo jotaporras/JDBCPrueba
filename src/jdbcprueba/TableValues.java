@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jdbcprueba;
 
 /**
@@ -11,16 +10,27 @@ package jdbcprueba;
  * @author Javier
  */
 public class TableValues {
+
     private String owner;
     private float usedSpace;//In KB.
     private int numRows;
-    private int avgRowLen; 
+    private int avgRowLen;
+    private String tablespace;
 
-    public TableValues(String owner, float usedSpace, int numRows, int avgRowLen) {
+    public TableValues(String owner, float usedSpace, int numRows, int avgRowLen, String tablespace) {
         this.owner = owner;
         this.usedSpace = usedSpace;
         this.numRows = numRows;
         this.avgRowLen = avgRowLen;
+        this.tablespace = tablespace;
+    }
+
+    public String getTablespace() {
+        return tablespace;
+    }
+
+    public void setTablespace(String tablespace) {
+        this.tablespace = tablespace;
     }
 
     public TableValues() {
@@ -57,6 +67,5 @@ public class TableValues {
     public void setAvgRowLen(int avgRowLen) {
         this.avgRowLen = avgRowLen;
     }
-    
-    
+
 }

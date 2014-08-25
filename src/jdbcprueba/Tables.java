@@ -33,7 +33,7 @@ public class Tables {
         this.hashTables = hashTables;
     }
     
-    public void updateTables(String name,String owner,float usedSpace,int numRows,int avgRowLen) {     
+    public void updateTables(String name,String owner,float usedSpace,int numRows,int avgRowLen,String tablespace) {     
         TableValues values;
         if(hashTables.containsKey(name)){
             values = hashTables.get(name);
@@ -41,8 +41,9 @@ public class Tables {
             values.setUsedSpace(usedSpace);
             values.setNumRows(numRows);
             values.setAvgRowLen(avgRowLen);
+            values.setTablespace(tablespace);
         }
-        else values = new TableValues(owner, usedSpace, numRows, avgRowLen);
+        else values = new TableValues(owner, usedSpace, numRows, avgRowLen,tablespace);
         hashTables.put(name, values);//No se si se ocupa para el primer caso.
     }
 }

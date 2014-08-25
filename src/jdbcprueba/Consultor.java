@@ -123,7 +123,7 @@ public class Consultor {
     public void getTablesInfo(Tables tables) {
         PreparedStatement pst;
         ResultSet rs;
-        String sql = "select owner,table_name,tablespace_name,num_rows\n"
+        String sql = "select owner,table_name,tablespace_name,num_rows,avg_row_len\n"
                 + "from dba_tables\n"
                 + "where \n"
                 + "TABLESPACE_NAME NOT LIKE '%SYS%'\n"
@@ -136,11 +136,79 @@ public class Consultor {
                 String owner = rs.getString("owner");
                 String TBSName = rs.getString("tablespace_name");
                 int numRows = rs.getInt("num_rows");
-                float tamTabla =  (float)1337.69; //WORK IN PROGRESS.
-                tables.updateTables(name, owner, tamTabla, numRows, numRows);
+                int avgRowlen = rs.getInt("avg_row_len");
+                float tamTabla = (float) 1337.69; //WORK IN PROGRESS.
+                //float tamTabla = this.getTableSize(name);
+                tables.updateTables(name, owner, tamTabla, numRows, numRows, TBSName);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Consultor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public SGAData getSGAValues() { //For first run, queries max space as well as used space 
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT\n"
+                + "    f.pool POOLNAME\n"
+                + "  , s.sgasize/1024 TOTAL\n"
+                + "  ,(s.sgasize-f.bytes)/1024 USED\n"
+                + "FROM\n"
+                + "    (SELECT SUM(bytes) sgasize, pool FROM v$sgastat GROUP BY pool) s\n"
+                + "  , v$sgastat f\n"
+                + "WHERE\n"
+                + "    f.name = 'free memory'\n"
+                + "  AND f.pool = s.pool\n"
+                + "ORDER BY POOLNAME\n"
+                + "  ;";
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            int[] total = new int[3];
+            int[] used = new int[3];
+            int i = 0;
+            while (rs.next() && i < 3) {
+                total[i] = rs.getInt("TOTAL");
+                used[i] = rs.getInt("USED");
+                i++;
+            }
+            return new SGAData(total[0], total[2], total[1], used[0], used[2], used[1]);
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void getSGAActualValues(SGAData sgadata) {//UPDATE EXISTING VALUES FOR REAL TIME MONITORING
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT\n"
+                + "    f.pool POOLNAME\n"
+                + "  , s.sgasize/1024 TOTAL\n"
+                + "  ,(s.sgasize-f.bytes)/1024 USED\n"
+                + "FROM\n"
+                + "    (SELECT SUM(bytes) sgasize, pool FROM v$sgastat GROUP BY pool) s\n"
+                + "  , v$sgastat f\n"
+                + "WHERE\n"
+                + "    f.name = 'free memory'\n"
+                + "  AND f.pool = s.pool\n"
+                + "ORDER BY POOLNAME\n"
+                + "  ;";
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            int[] used = new int[3];
+            int i = 0;
+            while (rs.next() && i < 3) {
+                used[i] = rs.getInt("USED");
+                i++;
+            }
+            sgadata.updateValues(used[0], used[2], used[1]);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
 }
