@@ -31,7 +31,7 @@ public class JDBCPrueba {
         try {
             // TODO code application logic here
             Class.forName("oracle.jdbc.OracleDriver");
-            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "c##jota", "jota");
+            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "sys", "root");
             return con;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JDBCPrueba.class.getName()).log(Level.SEVERE, null, ex);
