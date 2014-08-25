@@ -1,5 +1,5 @@
 --Tablas y sus dueños
-select owner,table_name,tablespace_name,num_rows,
+select owner,table_name,tablespace_name,num_rows
 from dba_tables
 where 
 TABLESPACE_NAME NOT LIKE '%SYS%'
