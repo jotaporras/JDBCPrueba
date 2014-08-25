@@ -93,3 +93,14 @@ select segment_name,segment_type,bytes MB,blocks
 ;
 
 select v$log.group#,sequence#,bytes/1048576 as MB,members,archived,v$log.status, member as location from v$log, v$logfile where v$log.group#=v$logfile.GROUP#;
+
+
+SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, LAST_ANALYZED
+    FROM DBA_TAB_COLUMNS
+    WHERE OWNER = 'C##JOTA'
+    ORDER BY TABLE_NAME;
+
+select v$log.group#,sequence#,bytes/1048576 as MB,members,archived,v$log.status, member as location from v$log, v$logfile where v$log.group#=v$logfile.GROUP#;
+SELECT * FROM V$log;
+select * from v$logfile;
+select * from v$log;
