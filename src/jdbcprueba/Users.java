@@ -7,13 +7,27 @@
 package jdbcprueba;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author Javier
  */
 public class Users {
-    private ArrayList<String> listaUsers = new ArrayList<>();
-    private int x = 1;
+    private ArrayList<String> listaNombres = new ArrayList<>();
+    private HashMap<String,UserData> hashUsuarios = new HashMap<String, UserData>();
+    
+     public void updateUsers(String nombre,String defaultTBS,String tempTBS,String estado) {     
+        UserData values;
+        if(hashUsuarios.containsKey(nombre)){
+            values = hashUsuarios.get(nombre);
+            values.setDefaultTBS(defaultTBS);
+            values.setAccountStatus(estado);
+        }
+        else values = new UserData(defaultTBS,estado);
+        hashUsuarios.put(nombre, values);//No se si se ocupa para el primer caso.
+    }
+    
+    
     
 }

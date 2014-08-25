@@ -43,7 +43,7 @@ public class Consultor {
                 + "(SUM(decode(f.bytes, NULL,0, f.bytes))/1024/1024),2) \"MB Usados\","
                 + "ROUND(SUM(decode(f.bytes, NULL,0, f.bytes))/1024/1024,2) \"MB Libres\","
                 + "t.pct_increase \"% incremento\","
-                + "SUBSTR(d.file_name,1,80) \"Fichero de datos\""
+                + "SUBSTR(d.file_name,1,80) \"DireccionDBF\""
                 + "FROM DBA_FREE_SPACE f, DBA_DATA_FILES d, DBA_TABLESPACES t"
                 + "WHERE t.tablespace_name = d.tablespace_name AND"
                 + "f.tablespace_name(+) = d.tablespace_name"
@@ -57,7 +57,8 @@ public class Consultor {
                 boolean estado = rs.getString("Estado").equals("ONLINE");//Habra que cambiarlo si hay mas de dos estados.
                 int tamTotal = rs.getInt("MB Tamaño");
                 int tamUsado = rs.getInt("MB Usados");
-                tbSpaces.updateTBS(nombre, estado, tamTotal, tamUsado);
+                String dirDBF = rs.getString("DireccionDBF");
+                tbSpaces.updateTBS(nombre, estado, tamTotal, tamUsado, dirDBF);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Consultor.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,7 +89,7 @@ public class Consultor {
                 boolean estado = rs.getString("Estado").equals("ONLINE");//Habra que cambiarlo si hay mas de dos estados.
                 int tamTotal = rs.getInt("MB Tamaño");
                 int tamUsado = rs.getInt("MB Usados");
-                tbSpaces.updateTBS(x, estado, tamTotal, tamUsado);
+                // tbSpaces.updateTBS(x, estado, tamTotal, tamUsado);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Consultor.class.getName()).log(Level.SEVERE, null, ex);
@@ -96,4 +97,32 @@ public class Consultor {
 
     }
 
+    public void getUsersInfo(Users users) {
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT username,\n"
+                + "       default_tablespace,\n"
+                + "       temporary_tablespace,\n"
+                + "       ACCOUNT_STATUS,\n"
+                + " FROM dba_users";
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                String username = rs.getString("username");
+                String defaultTBS = rs.getString("default_tablespace");
+                String tempTBS = rs.getString("temporary_tablespace");
+                String status = rs.getString("ACCOUNT_STATUS");
+                users.updateUsers(username, defaultTBS, tempTBS, status);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void getTablesInfo(Tables tables) {
+        //Por aca voy
+        System.out.println("Coming soon");
+    }
 }
