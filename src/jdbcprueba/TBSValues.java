@@ -3,22 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jdbcprueba;
 
 /**
  *
  * @author Javier
  */
-public class ValoresTBS {
+public class TBSValues {
+
     boolean estado;
     int tamTotal;
     int tamUsado;
+    String dirDBF;
 
-    public ValoresTBS(boolean estado, int tamTotal, int tamUsado) {
+    public TBSValues(boolean estado, int tamTotal, int tamUsado, String dirDBF) {
         this.estado = estado;
         this.tamTotal = tamTotal;
         this.tamUsado = tamUsado;
+        this.dirDBF = dirDBF;
     }
 
     public boolean isEstado() {
@@ -43,5 +45,13 @@ public class ValoresTBS {
 
     public void setTamUsado(int tamUsado) {
         this.tamUsado = tamUsado;
+    }
+
+    public String getDirDBF() {
+        return dirDBF;
+    }
+
+    public void setDirDBF(String dirDBF) {
+        this.dirDBF = dirDBF;
     }
 }

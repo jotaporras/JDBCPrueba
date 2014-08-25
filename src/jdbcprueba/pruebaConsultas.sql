@@ -2,7 +2,8 @@
 select *
 from dba_tables
 where 
-owner<>'SYS' 
+TABLESPACE_NAME='USERS'
+AND owner<>'SYS' 
 AND owner<>'OUTLN' 
 AND owner<>'SYSTEM' 
 AND owner<>'DBSNMP' 
@@ -23,6 +24,11 @@ AND owner<>'FLOWS_FILES'
 AND owner<>'AUDSYS' 
 ;
 
+select owner,table_name,tablespace_name
+from dba_tables
+where 
+TABLESPACE_NAME NOT LIKE '%SYS%'
+AND OWNER NOT LIKE '%SYS%';
 
 select owner, table_name, round((num_rows*avg_row_len)/(1024*1024)) MB 
 from all_tables 
@@ -76,3 +82,14 @@ select * from v$logfile;
 select group#, status, user, blocksize, archived from v$log;
 
 select v$log.group#,sequence#,bytes/1048576 as MB,members,archived,v$log.status, member from v$log, v$logfile where v$log.group#=v$logfile.GROUP#;
+
+
+select owner,segment_name,bytes,blocks from dba_extents WHERE segment_name not like '%SYS%' AND tablespace_name not like '%SYS%' AND owner not like '%SYS%' AND SEGMENT_NAME NOT LIKE '%IX%' AND SEGMENT_NAME NOT LIKE '%PK%' ;
+
+select *  from dba_tables;
+
+select segment_name,segment_type,bytes MB,blocks
+ from dba_segments
+;
+
+select v$log.group#,sequence#,bytes/1048576 as MB,members,archived,v$log.status, member as location from v$log, v$logfile where v$log.group#=v$logfile.GROUP#;

@@ -14,9 +14,8 @@ import java.util.HashMap;
  */
 public class Tablespaces {
 
-    HashMap<String, ValoresTBS> hashTBS = new HashMap<>();
+    HashMap<String, TBSValues> hashTBS = new HashMap<>();
     ArrayList<String> nombres = new ArrayList<>();//Las llaves
-
 
     public ArrayList<String> getNombres() {
         return nombres;
@@ -25,26 +24,19 @@ public class Tablespaces {
     public void setNombres(ArrayList<String> nombres) {
         this.nombres = nombres;
     }
+    
 
-    public ArrayList<String> getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(ArrayList<String> ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-    ArrayList<String> ubicacion = new ArrayList<>();
-
-    public void updateTBS(String nombre, boolean estado, int tamTotal, int tamUsado) {     
-        ValoresTBS values;
-        if(hashTBS.containsKey(nombre)){
-            values = hashTBS.get(nombre);
-            values.setEstado(estado);
-            values.setTamTotal(tamTotal);
-            values.setTamUsado(tamUsado);
+    public void updateTBS(String name, boolean state, int totalSize, int usedSpace,String dirDBF) {     
+        TBSValues values;
+        if(hashTBS.containsKey(name)){
+            values = hashTBS.get(name);
+            values.setEstado(state);
+            values.setTamTotal(totalSize);
+            values.setTamUsado(usedSpace);
+            values.setDirDBF(dirDBF);
         }
-        else values = new ValoresTBS(estado,tamTotal,tamUsado);
-        hashTBS.put(nombre, values);//No se si se ocupa para el primer caso.
+        else values = new TBSValues(state,totalSize,usedSpace,dirDBF);
+        hashTBS.put(name, values);//No se si se ocupa para el primer caso.
     }
 
 }
